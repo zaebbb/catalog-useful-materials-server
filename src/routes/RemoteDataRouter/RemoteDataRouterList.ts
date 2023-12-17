@@ -1,0 +1,6 @@
+export const REMOTE_DATA_ROUTE: string = '/remote-data'
+export const TEST_LIST_ROUTE: string = '/test-list'
+export const NOTES_TYPES_LIST_ROUTE: string = '/notes-types-list'
+export const NOTES_VIEWS_LIST_ROUTE: string = '/notes-views-list'
+export const CATEGORIES_LIST_ROUTE: string = '/categories-list'
+export const TAGS_LIST_ROUTE: string = '/tags-list'

@@ -1,0 +1,221 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  // base
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  active Boolean @default(true)
+
+  // model fields
+  username String @unique @db.VarChar(255)
+  email String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+
+  // relation
+  userData UserData?
+  accesses UserAccess[]
+  notes Notes[]
+}
+
+model UserData {
+  // base
+  id Int @id @default(autoincrement())
+
+  // model fields
+  avatar String? @db.VarChar(255)
+  name String? @db.VarChar(255)
+  surname String? @db.VarChar(255)
+  patronymic String? @db.VarChar(255)
+  accGoogle Boolean?
+  accGithub String? @db.VarChar(255)
+  user_id Int @unique
+
+  // relation
+  user Users @relation(fields: [user_id], references: [id])
+}
+
+model Access {
+  // base
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  active Boolean @default(true)
+
+  // model fields
+  name String @unique @db.VarChar(255)
+  code String @unique @db.VarChar(255)
+
+  // relation
+  users UserAccess[]
+}
+
+model UserAccess {
+  // base
+  id Int @id @default(autoincrement())
+
+  // model fields
+  user_id Int
+  access_id Int
+
+  // relation
+  user Users @relation(fields: [user_id], references: [id])
+  access Access @relation(fields: [access_id], references: [id])
+}
+
+model Notes {
+  // base
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  active Boolean @default(true)
+
+  // model fields
+  title String @db.VarChar(1000)
+  description String @db.Text
+  code String @unique @db.VarChar(255)
+  user_id Int
+  category_id Int
+  type_id Int
+  view_id Int
+
+  // relation
+  user Users @relation(fields: [user_id], references: [id])
+  category Categories @relation(fields: [category_id], references: [id])
+  type NotesTypes @relation(fields: [type_id], references: [id])
+  view NotesViews @relation(fields: [view_id], references: [id])
+  fields Fields[]
+  tags NoteTag[]
+}
+
+model NotesViews {
+  // base
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  active Boolean @default(true)
+
+  // model fields
+  name String @unique @db.VarChar(255)
+  code String @unique @db.VarChar(255)
+
+  // relation
+  notes Notes[]
+}
+
+model Categories {
+  // base
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  active Boolean @default(true)
+
+  // model fields
+  name String @unique @db.VarChar(255)
+  code String @unique @db.VarChar(255)
+
+  // relation
+  notes Notes[]
+}
+
+model Fields {
+  // base
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  active Boolean @default(true)
+
+  // model fields
+  name String @db.VarChar(255)
+  code String @unique @db.VarChar(255)
+  value String @db.Text
+  note_id Int
+
+  // relation
+  notes Notes @relation(fields: [note_id], references: [id])
+}
+
+model NotesTypes {
+  // base
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  active Boolean @default(true)
+
+  // model fields
+  name String @unique @db.VarChar(255)
+  code String @unique @db.VarChar(255)
+  isCustom Boolean @default(false)
+
+  // relation
+  notes Notes[]
+  customFields CustomNoteFieldsTypes[]
+}
+
+model CustomNoteFieldsTypes {
+  // base
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  active Boolean @default(true)
+
+  // model fields
+  custom_note_type_id Int
+  custom_note_field_id Int
+  title String @db.VarChar(255)
+  isRequired Boolean @default(false)
+
+  // relation
+  noteFields CustomNoteFields @relation(fields: [custom_note_field_id], references: [id])
+  noteTypes NotesTypes @relation(fields: [custom_note_type_id], references: [id])
+}
+
+model CustomNoteFields {
+  // base
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  active Boolean @default(true)
+
+  // model fields
+  name String @unique @db.VarChar(255)
+  code String @unique @db.VarChar(255)
+
+  // relation
+  customNoteFields CustomNoteFieldsTypes[]
+}
+
+model Tags {
+  // base
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  active Boolean @default(true)
+
+  // model fields
+  name String @unique @db.VarChar(255)
+  code String @unique @db.VarChar(255)
+
+  // relation
+  noteTag NoteTag[]
+}
+
+model NoteTag {
+  // base
+  id Int @id @default(autoincrement())
+
+  // model fields
+  note_id Int
+  tag_id Int
+
+  // relation
+  notes Notes @relation(fields: [note_id], references: [id])
+  tags Tags @relation(fields: [tag_id], references: [id])
+}
