@@ -14,8 +14,6 @@ const paths: PathsOptions = {
   uploadPath: path.resolve(__dirname, 'upload'),
 }
 
-// TODO: перенеести хаски и lint-staged
-
 if (require.main === module) {
   application({
     port,
