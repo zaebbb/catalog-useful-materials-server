@@ -6,10 +6,16 @@
   "scripts": {
     "start": "ts-node -r tsconfig-paths/register index.ts",
     "start:nodemon": "nodemon -r tsconfig-paths/register index.ts",
-    "lint:ts": "eslint \"**/*.ts\"",
+    "lint:ts": "eslint \"**/*.ts\" --quiet",
+    "lint:ts:warning": "eslint \"**/*.{tsx,ts}\"",
+    "lint:ts:fix": "eslint \"**/*.{tsx,ts}\" --fix",
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:generate": "npx prisma generate",
-    "prisma:seed": "ts-node -r tsconfig-paths/register ./prisma/seeds/index.ts"
+    "prisma:seed": "ts-node -r tsconfig-paths/register ./prisma/seeds/index.ts",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "**/*.{ts}": "eslint --quiet"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +23,7 @@
   "dependencies": {
     "@prisma/client": "^5.4.2",
     "@types/express-fileupload": "^1.4.3",
+    "axios": "^1.6.3",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
@@ -42,11 +49,13 @@
     "eslint-plugin-n": "^16.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-unused-imports": "^3.0.0",
+    "lint-staged": "^15.2.0",
     "prisma": "^5.4.2",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.2.2",
     "uuid": "^9.0.1",
-    "winston": "^3.11.0"
+    "winston": "^3.11.0",
+    "husky": "^8.0.0"
   }
 }

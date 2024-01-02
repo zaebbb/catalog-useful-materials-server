@@ -9,6 +9,7 @@ export interface GetDirUpload {
 }
 
 export const getDirUpload = (paths: string[] = []): GetDirUpload => {
+  // TODO: доработать чтобы было из конфига
   const host = `http://localhost:${process.env.APP_PORT}`
 
   if (paths.length) {

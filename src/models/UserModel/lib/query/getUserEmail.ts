@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { GetFileService } from '@service/FileService'
 import { type Access, type UserData } from '../types/UserModel'
 
 const prisma = new PrismaClient()
@@ -14,6 +15,11 @@ export const getUserEmail = async (email: string): Promise<UserData> => {
       id: true,
       email: true,
       username: true,
+      userData: {
+        select: {
+          avatar: true,
+        },
+      },
       accesses: {
         select: {
           access: {
@@ -40,10 +46,13 @@ export const getUserEmail = async (email: string): Promise<UserData> => {
     })
   })
 
+  const avatarFile = new GetFileService(user?.userData?.avatar)
+
   const userData: UserData = {
     id: Number(user?.id),
     email: user?.email ?? '',
     username: user?.username ?? '',
+    avatar: user?.userData?.avatar ? avatarFile.getPath() : '',
     accesses,
   }
 

@@ -31,7 +31,7 @@ module.exports = {
       'error',
       {
         ignoreComments: true,
-        code: 110,
+        code: 120,
       },
     ],
     '@typescript-eslint/dot-notation': ['warn'],

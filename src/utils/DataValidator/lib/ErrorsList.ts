@@ -1,7 +1,9 @@
 interface ErrorsListOptions {
   required: string
   email: string
+  emailExist: string
   max: string
+  min: string
   fileSize: string
   image: string
   link: string
@@ -11,12 +13,16 @@ interface ErrorsListOptions {
   tags: string
   array: string
   arrayLength: string
+  document: string
+  dataMatch: string
 }
 
 export const ErrorsList: ErrorsListOptions = {
   required: 'Поле обязательно к заполнению',
   email: 'Формат почты некорректный (Например example@gmail.com)',
+  emailExist: 'Данная электронная почта уже существует в системе',
   max: 'Слишком длинная фраза. Ограничение символов: {MAX}',
+  min: 'Слишком короткая фраза. Должно быть более {MIN} символов',
   fileSize: 'Файл не должен превышать {MAX}MB',
   image: 'Загруженный файл не является изображением',
   link: 'Формат ссылки некорректный (Например https://example.com)',
@@ -26,4 +32,6 @@ export const ErrorsList: ErrorsListOptions = {
   tags: 'Все (или некоторые) выбранные вами теги не найдены в системе',
   array: 'Неверный формат переданных данных',
   arrayLength: 'Выбрано слишком мало значений. Выберите элементов не менее: {MIN}',
+  document: 'Загружанный файл не является документом',
+  dataMatch: 'Введеные значения не совпадают',
 }

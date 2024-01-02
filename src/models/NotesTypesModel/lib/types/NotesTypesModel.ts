@@ -14,7 +14,9 @@ export enum NotesTypesCodeList {
   // Тип записи - Курс
   COURSE = 'course',
   // Тип записи - Книга
-  BOOK = 'book'
+  BOOK = 'book',
+  // Тип записи - Видео / конференция
+  VIDEO = 'remote-source'
 }
 
 export interface NotesTypesItem {

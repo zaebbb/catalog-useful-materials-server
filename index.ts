@@ -8,11 +8,13 @@ dotenv.config()
 
 const port: number = Number(process.env.APP_PORT) || 8088
 const api: string = '/api/v1'
-const clientApi: string = process.env.APP_CLIENT_URL || 'http://localhost:3000'
+const clientApi: string = process.env.APP_CLIENT_URL || 'http://localhost'
 const paths: PathsOptions = {
   staticPath: path.resolve(__dirname, 'public'),
   uploadPath: path.resolve(__dirname, 'upload'),
 }
+
+// TODO: перенеести хаски и lint-staged
 
 if (require.main === module) {
   application({

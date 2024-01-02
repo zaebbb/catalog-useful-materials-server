@@ -1,5 +1,6 @@
 export const USER_ROUTE: string = '/users'
 export const USER_ROUTE_AUTH: string = '/login'
+export const USER_ROUTE_REGISTER: string = '/register'
 export const USER_ROUTE_CHECK: string = '/check'
 export const USER_ROUTE_LOGOUT: string = '/logout'
 export const USER_ROUTE_PROFILE_DATA: string = '/profile-data'

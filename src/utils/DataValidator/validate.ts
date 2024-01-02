@@ -1,8 +1,12 @@
+import { isDataMatch } from '@utils/DataValidator/helpers/isDataMatch'
+import { isEmailExist } from '@utils/DataValidator/helpers/isEmailExist'
+import { isMinString } from '@utils/DataValidator/helpers/isMinString'
 import { textReplacer } from '@utils/textReplacer'
 import type fileUpload from 'express-fileupload'
 import { isArray } from './helpers/isArray'
 import { isArrayMinLength } from './helpers/isArrayMinLength'
 import { isCategoryExists } from './helpers/isCategoryExists'
+import { isDocument } from './helpers/isDocument'
 import { isEmail } from './helpers/isEmail'
 import { isFile } from './helpers/isFile'
 import { isFileSize } from './helpers/isFileSize'
@@ -15,15 +19,17 @@ import { isTypeNoteExist } from './helpers/isTypeNoteExist'
 import { isViewNoteExist } from './helpers/isViewNoteExist'
 import { ErrorsList } from './lib/ErrorsList'
 import {
-  type ErrorResult,
+  type ErrorResult, type IsDataMatch,
   type IsFileMax,
-  type IsMaxStringProps, type IsMinArrayProps,
+  type IsMaxStringProps, type IsMinArrayProps, type IsMinStringProps,
 } from './lib/types/DataValidator'
 
 interface DataValidatorOptions {
   isRequired?: boolean
   isEmail?: boolean
+  isEmailExist?: boolean
   isMaxString?: IsMaxStringProps
+  isMinString?: IsMinStringProps
   isFileSize?: IsFileMax
   isImage?: boolean
   isFile?: boolean
@@ -34,6 +40,8 @@ interface DataValidatorOptions {
   isNotesTypesExist?: boolean
   isNotesViewsExist?: boolean
   isTagsExist?: boolean
+  isDocument?: boolean
+  isDataMatch?: IsDataMatch
 }
 
 export const validate = async <T>(value: T, options: DataValidatorOptions): Promise<ErrorResult> => {
@@ -43,6 +51,10 @@ export const validate = async <T>(value: T, options: DataValidatorOptions): Prom
 
   if (options.isEmail && !isEmail(String(value))) {
     return ErrorsList.email
+  }
+
+  if (options.isEmailExist && await isEmailExist(String(value))) {
+    return ErrorsList.emailExist
   }
 
   if (options.isLink && !isLink(String(value))) {
@@ -73,13 +85,25 @@ export const validate = async <T>(value: T, options: DataValidatorOptions): Prom
     return ErrorsList.category
   }
 
+  if (options.isDataMatch?.on && !isDataMatch(value as string, options.isDataMatch?.dataMatch)) {
+    return ErrorsList.dataMatch
+  }
+
   if (options.isMaxString?.on && !isMaxString(String(value), options.isMaxString.max)) {
     return textReplacer(ErrorsList.max, 'MAX', String(options.isMaxString.max))
+  }
+
+  if (options.isMinString?.on && !isMinString(String(value), options.isMinString.min)) {
+    return textReplacer(ErrorsList.min, 'MIN', String(options.isMinString.min))
   }
 
   if (options.isFile && isFile(value as fileUpload.UploadedFile)) {
     if (options.isImage && !isImage(value as fileUpload.UploadedFile)) {
       return ErrorsList.image
+    }
+
+    if (options.isDocument && !isDocument(value as fileUpload.UploadedFile)) {
+      return ErrorsList.document
     }
 
     if (

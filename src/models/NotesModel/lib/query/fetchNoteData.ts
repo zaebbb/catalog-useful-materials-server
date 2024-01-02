@@ -1,9 +1,17 @@
+import { NotesTypesCodeList as TypeList } from '@model/NotesTypesModel'
 import { type Tag } from '@model/TagModel'
 import { PrismaClient } from '@prisma/client'
 import { GetFileService } from '@service/FileService'
-import { isEmptyObject } from '@utils/isEmptyObject'
+import { isPattern } from '../helpers/isPattern'
 import { mapperArticlePattern } from '../helpers/mapperArticlePattern'
+import { mapperBookPattern } from '../helpers/mapperBookPattern'
 import { mapperCodePattern } from '../helpers/mapperCodePattern'
+import { mapperCoursePattern } from '../helpers/mapperCoursePattern'
+import { mapperIssuePattern } from '../helpers/mapperIssuePattern'
+import { mapperLayoutPattern } from '../helpers/mapperLayoutPattern'
+import { mapperServicePattern } from '../helpers/mapperServicePattern'
+import { mapperTechnologyPattern } from '../helpers/mapperTechnologyPattern'
+import { mapperVideoPattern } from '../helpers/mapperVideoPattern'
 import { type BaseFieldsDetails } from '../types/NotedDetailsModel'
 
 const prisma = new PrismaClient()
@@ -14,6 +22,7 @@ export const fetchNoteData = async (code: string): Promise<BaseFieldsDetails | u
       title: true,
       description: true,
       active: true,
+      createdAt: true,
       category: {
         select: {
           code: true,
@@ -60,6 +69,13 @@ export const fetchNoteData = async (code: string): Promise<BaseFieldsDetails | u
           value: true,
           name: true,
         },
+        where: {
+          notes: {
+            code: {
+              equals: code,
+            },
+          },
+        },
       },
     },
     where: {
@@ -80,13 +96,25 @@ export const fetchNoteData = async (code: string): Promise<BaseFieldsDetails | u
 
   const patternArticle = mapperArticlePattern(note.fields)
   const patternCode = mapperCodePattern(note.fields)
+  const patternIssue = mapperIssuePattern(note.fields)
+  const patternLayout = mapperLayoutPattern(note.fields)
+  const patternService = mapperServicePattern(note.fields)
+  const patternBook = mapperBookPattern(note.fields)
+  const patternVideo = mapperVideoPattern(note.fields)
+  const patternTechnology = mapperTechnologyPattern(note.fields)
+  const patternCourse = mapperCoursePattern(note.fields)
 
   const avatarFile = new GetFileService(note.user.userData?.avatar)
+
+  const {
+    code: codeNote,
+  } = note.type
 
   return {
     title: note.title ?? '',
     description: note.description,
     draft: !note.active,
+    createdAt: note.createdAt,
     category: note.category,
     type: note.type,
     view: note.view,
@@ -97,7 +125,14 @@ export const fetchNoteData = async (code: string): Promise<BaseFieldsDetails | u
       email: note.user.email,
       avatar: note.user.userData?.avatar ? avatarFile.getPath() : '',
     },
-    patternArticle: !isEmptyObject(patternArticle) ? patternArticle : undefined,
-    patternCode: !isEmptyObject(patternCode) ? patternCode : undefined,
+    patternArticle: isPattern(patternArticle, codeNote, TypeList.ARTICLE) ? patternArticle : undefined,
+    patternCode: isPattern(patternCode, codeNote, TypeList.CODE) ? patternCode : undefined,
+    patternIssue: isPattern(patternIssue, codeNote, TypeList.ISSUE) ? patternIssue : undefined,
+    patternLayout: isPattern(patternLayout, codeNote, TypeList.LAYOUT) ? patternLayout : undefined,
+    patternService: isPattern(patternService, codeNote, TypeList.SERVICE) ? patternService : undefined,
+    patternBook: isPattern(patternBook, codeNote, TypeList.BOOK) ? patternBook : undefined,
+    patternVideo: isPattern(patternVideo, codeNote, TypeList.VIDEO) ? patternVideo : undefined,
+    patternTechnology: isPattern(patternTechnology, codeNote, TypeList.TECHNOLOGY) ? patternTechnology : undefined,
+    patternCourse: isPattern(patternCourse, codeNote, TypeList.COURSE) ? patternCourse : undefined,
   }
 }
