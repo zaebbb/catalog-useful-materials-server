@@ -1,7 +1,5 @@
 import * as nodePath from 'path'
-import dotenv from 'dotenv'
-
-dotenv.config()
+import { getDomain } from '@utils/getDomain'
 
 export interface GetDirUpload {
   src: string
@@ -9,8 +7,7 @@ export interface GetDirUpload {
 }
 
 export const getDirUpload = (paths: string[] = []): GetDirUpload => {
-  // TODO: доработать чтобы было из конфига
-  const host = `http://localhost:${process.env.APP_PORT}`
+  const host = getDomain()
 
   if (paths.length) {
     return {
