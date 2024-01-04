@@ -9,7 +9,8 @@
     "lint:ts": "eslint \"**/*.ts\" --quiet",
     "lint:ts:warning": "eslint \"**/*.{tsx,ts}\"",
     "lint:ts:fix": "eslint \"**/*.{tsx,ts}\" --fix",
-    "prisma:migrate": "npx prisma migrate dev --name init",
+    "prisma:migrate:dev": "npx prisma migrate dev --name init",
+    "prisma:migrate: prod": "npx prisma migrate deploy",
     "prisma:generate": "npx prisma generate",
     "prisma:seed": "ts-node -r tsconfig-paths/register ./prisma/seeds/index.ts",
     "prepare": "husky install"
