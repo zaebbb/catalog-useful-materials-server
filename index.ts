@@ -1,6 +1,5 @@
 import path from 'path'
 import { application } from '@app/application'
-import { startServer } from '@config/startServer'
 import { type ModeType, type PathsOptions } from '@config/types/config'
 import dotenv from 'dotenv'
 
@@ -18,17 +17,13 @@ const paths: PathsOptions = {
   uploadPath: path.resolve(__dirname, 'upload'),
 }
 
-if (require.main === module) {
-  application({
-    port: portHttp,
-    portSsl: portHttps,
-    paths,
-    clientApi,
-    api,
-    mode,
-    sslCertificate,
-    sslPrivateKey,
-  })
-} else {
-  module.exports = startServer
-}
+application({
+  port: portHttp,
+  portSsl: portHttps,
+  paths,
+  clientApi,
+  api,
+  mode,
+  sslCertificate,
+  sslPrivateKey,
+})
