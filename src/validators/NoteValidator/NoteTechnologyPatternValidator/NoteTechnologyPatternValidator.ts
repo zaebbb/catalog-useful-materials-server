@@ -25,7 +25,6 @@ export class NoteTechnologyPatternValidator extends BaseValidator<TechnologyType
     } = this.getValues()
 
     this.setError('icon', await validate(icon, {
-      isRequired: true,
       isFile: true,
       isImage: true,
       isFileSize: { on: true, maxMB: 2 },
@@ -37,7 +36,6 @@ export class NoteTechnologyPatternValidator extends BaseValidator<TechnologyType
     }))
 
     this.setError('linkInstall', await validate(linkInstall, {
-      isRequired: true,
       isLink: true,
     }))
 

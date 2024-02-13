@@ -1,3 +1,4 @@
+import { UserAuthMiddleware } from '@middleware/UserAuthMiddleware'
 import bodyParser from 'body-parser'
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
@@ -9,6 +10,7 @@ export const expressLoader = (app: Express, options: ConfigOptions): void => {
   const {
     paths,
     mode,
+    api,
   } = options
 
   if (mode === 'production') {
@@ -21,6 +23,6 @@ export const expressLoader = (app: Express, options: ConfigOptions): void => {
   }))
   app.use(bodyParser.json())
   app.use(fileUpload())
-  app.use(express.static(paths.staticPath))
-  app.use(express.static(paths.uploadPath))
+  app.use(api + '/static', UserAuthMiddleware, express.static(paths.staticPath))
+  app.use(api + '/upload', UserAuthMiddleware, express.static(paths.uploadPath))
 }

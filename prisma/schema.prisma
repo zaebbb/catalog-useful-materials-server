@@ -134,7 +134,7 @@ model Fields {
 
   // model fields
   name String @db.VarChar(255)
-  code String @unique @db.VarChar(255)
+  code String @db.VarChar(255)
   value String @db.Text
   note_id Int
 

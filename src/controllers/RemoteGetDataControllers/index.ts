@@ -13,3 +13,6 @@ export {
 export {
   TagsListController,
 } from './lib/TagsListController/TagsListController'
+export {
+  CustomFieldsListController,
+} from './lib/CustomFieldsListController/CustomFieldsListController'

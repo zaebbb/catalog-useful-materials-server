@@ -1,0 +1,65 @@
+import { type ArticleTypePattern, createNotePatternArticle, editNotePatternArticle } from '@model/NotesModel'
+import { FileService } from '@service/FileService'
+import { AppResponse } from '@utils/AppResponse'
+import { getFile } from '@utils/fileSystem/getFile'
+import { NoteArticlePatternValidator } from '@validator/NoteValidator'
+import { type Request, type Response } from 'express'
+
+export interface NotePatternArticleRequest extends Request {
+  body: Omit<ArticleTypePattern, 'image' | 'tagsIds'> & {
+    tagsIds: string
+  }
+}
+
+export const SaveNotePatternArticleController = async (
+  req: NotePatternArticleRequest,
+  res: Response
+) => {
+  const noteData = req.body
+  const files = req.files
+  const image = getFile(files?.image)
+  const tagsIds = JSON.parse(noteData.tagsIds)
+
+  const validator: NoteArticlePatternValidator = new NoteArticlePatternValidator({
+    ...noteData,
+    tagsIds,
+    image,
+  })
+
+  if (await validator.apply()) {
+    return AppResponse.validation(res, validator.getErrors())
+  }
+
+  let filename = ''
+
+  if (image) {
+    const fileService = new FileService(image)
+    await fileService.save()
+    filename = fileService.getFilePath
+  }
+
+  let noteCode: string = ''
+
+  if (req.body.mode === 'create') {
+    noteCode = await createNotePatternArticle({
+      ...noteData,
+      tagsIds,
+      image: filename,
+    })
+  } else if (req.body.mode === 'edit') {
+    noteCode = await editNotePatternArticle({
+      ...noteData,
+      tagsIds,
+      image: filename,
+      id: Number(noteData.id),
+    })
+  }
+
+  if (!noteCode) {
+    return AppResponse.error(res, 'Произошла ошибка при создании заметки')
+  }
+
+  return AppResponse.success(res, {
+    code: noteCode,
+  })
+}

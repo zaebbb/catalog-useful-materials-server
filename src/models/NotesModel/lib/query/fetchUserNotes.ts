@@ -1,10 +1,30 @@
 import { PrismaClient } from '@prisma/client'
-import { type UserNotesListElement } from '../types/NotesListModel'
+import { type UserNotesListElement, type UserNotesQueryParams } from '../types/NotesListModel'
 
 const prisma = new PrismaClient()
 
-export const fetchUserNotes = async (userId: number): Promise<UserNotesListElement[]> => {
+const ITEMS_COUNT = 10
+
+export const fetchUserNotes = async (
+  userId: number,
+  options: UserNotesQueryParams
+): Promise<UserNotesListElement[]> => {
+  const {
+    description,
+    categoryId,
+    viewId,
+    tagsIds,
+    page,
+    typeId,
+  } = options
+
+  const pageItems = Number(page)
+
+  const tags = tagsIds ? JSON.parse(tagsIds) as number[] : []
+
   const notes = await prisma.notes.findMany({
+    skip: ITEMS_COUNT * pageItems,
+    take: ITEMS_COUNT,
     select: {
       id: true,
       title: true,
@@ -22,6 +42,54 @@ export const fetchUserNotes = async (userId: number): Promise<UserNotesListEleme
       user_id: {
         equals: userId,
       },
+      OR: [
+        {
+          title: {
+            contains: description,
+          },
+        },
+        {
+          description: {
+            contains: description,
+          },
+        },
+      ],
+      AND: [
+        categoryId ? {
+          category_id: {
+            equals: Number(categoryId),
+          },
+        } : {},
+        viewId ? {
+          view_id: {
+            equals: Number(viewId),
+          },
+        } : {},
+        typeId ? {
+          type_id: {
+            equals: Number(typeId),
+          },
+        } : {},
+        tags.length ? {
+          tags: {
+            some: {
+              AND: [
+                {
+                  tags: {
+                    AND: [
+                      {
+                        id: {
+                          in: tags,
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        } : {},
+      ],
     },
     orderBy: [
       {

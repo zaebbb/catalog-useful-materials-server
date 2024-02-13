@@ -32,6 +32,7 @@ export const getUserProfileData = async (id: number): Promise<UserProfileData> =
 
   return {
     avatar: userData?.avatar ? avatarFile.getPath() : '',
+    avatarFilename: userData?.avatar ?? '',
     surname: userData?.surname ?? '',
     name: userData?.name ?? '',
     accGoogle: userData?.accGoogle ?? false,

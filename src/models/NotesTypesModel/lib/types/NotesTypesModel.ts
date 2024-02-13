@@ -1,3 +1,5 @@
+import { type NoteTypeFieldItem } from '@model/CustomFieldModel'
+
 export enum NotesTypesCodeList {
   // Тип записи - статья
   ARTICLE = 'article',
@@ -23,4 +25,22 @@ export interface NotesTypesItem {
   name: string
   code: string
   isCustom: boolean
+}
+
+export interface NotesTypesElement extends NotesTypesItem {
+  id: number
+  createdAt: Date
+}
+
+export interface CreateNoteType {
+  name: string
+  code: string
+  draft: boolean
+  fields: NoteTypeFieldItem[]
+}
+
+export interface NotePatternCustomField {
+  code: string
+  title: string
+  isRequired: boolean
 }

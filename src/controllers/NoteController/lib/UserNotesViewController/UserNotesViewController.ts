@@ -5,11 +5,23 @@ import { AppResponse } from '@utils/AppResponse'
 import { jwtVerify } from '@utils/jwt'
 import { type Response } from 'express'
 
+export interface UserNotesViewControllerRequest extends UserRequest {
+  query: {
+    description: string
+    categoryId: string
+    typeId: string
+    viewId: string
+    tagsIds: string
+    page: string
+  }
+}
+
 export const UserNotesViewController = async (
-  req: UserRequest,
+  req: UserNotesViewControllerRequest,
   res: Response
 ) => {
   const { Authorization: token } = req.cookies
+  const options = req.query
 
   if (!token) {
     return AppResponse.accessDenied(res)
@@ -21,11 +33,7 @@ export const UserNotesViewController = async (
     return AppResponse.internalError(res)
   }
 
-  const notes = await fetchUserNotes(jwtData?.id)
-
-  if (!notes.length) {
-    return AppResponse.notFound(res, 'Заметок не найдено')
-  }
+  const notes = await fetchUserNotes(jwtData?.id, options)
 
   return AppResponse.success(res, notes)
 }

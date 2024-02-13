@@ -16,6 +16,7 @@ export interface UserProfile {
 
 export interface UserProfileData extends Omit<UserProfile, 'avatar'> {
   avatar?: string
+  avatarFilename?: string
 }
 
 export interface UserBaseData {
@@ -38,4 +39,12 @@ export interface UserData extends UserBaseData {
   userData?: UserProfile
   accesses?: Access[]
   avatar?: string
+}
+
+export interface UserEditData {
+  id: number
+  email: string
+  username: string
+  isAdmin: boolean
+  isUser: boolean
 }

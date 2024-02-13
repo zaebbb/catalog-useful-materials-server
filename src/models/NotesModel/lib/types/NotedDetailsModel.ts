@@ -1,4 +1,5 @@
 import { type Category } from '@model/CategoryModel'
+import { type FieldItem } from '@model/FieldsModel'
 import { type NotesTypesItem } from '@model/NotesTypesModel'
 import { type NotesViewsItem } from '@model/NotesViewsModel'
 import { type Tag } from '@model/TagModel'
@@ -34,4 +35,5 @@ export interface BaseFieldsDetails {
   patternVideo?: PatternVideo
   patternTechnology?: PatternTechnology
   patternCourse?: PatternCourse
+  patternCustom?: FieldItem[]
 }

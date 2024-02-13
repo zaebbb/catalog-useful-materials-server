@@ -9,8 +9,6 @@ export const mapperCodePattern = (fields: MapperOption[]): PatternCode => {
   const code = fields
     .filter(field => field.name === PatterCodeCodeList.CODE)[0]
 
-  console.log(code)
-
   return {
     code,
   }

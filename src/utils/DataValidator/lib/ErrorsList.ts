@@ -15,6 +15,9 @@ interface ErrorsListOptions {
   arrayLength: string
   document: string
   dataMatch: string
+  tagExist: string
+  categoryExist: string
+  customField: string
 }
 
 export const ErrorsList: ErrorsListOptions = {
@@ -34,4 +37,7 @@ export const ErrorsList: ErrorsListOptions = {
   arrayLength: 'Выбрано слишком мало значений. Выберите элементов не менее: {MIN}',
   document: 'Загружанный файл не является документом',
   dataMatch: 'Введеные значения не совпадают',
+  tagExist: 'Тег уже существует в системе',
+  categoryExist: 'Категория уже существует в системе',
+  customField: 'Выбранный тип поля не найден в системе',
 }

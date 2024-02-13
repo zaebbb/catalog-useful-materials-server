@@ -9,6 +9,9 @@ export interface BaseFields {
   title: string
   description: string
   draft: boolean
+
+  mode?: NoteMode
+  id?: number
 }
 
 export interface Fields {
@@ -16,4 +19,7 @@ export interface Fields {
   files: UploadedFile[]
   text: string
   checkbox: boolean
+  int: number
 }
+
+export type NoteMode = 'create' | 'edit'

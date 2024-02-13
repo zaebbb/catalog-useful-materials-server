@@ -1,3 +1,5 @@
+import { type TagMode } from '@model/TagModel'
+
 export type ErrorResult = string | boolean
 
 interface BaseOptions {
@@ -23,3 +25,10 @@ export type IsFileMax = BaseOptions & {
 export type IsDataMatch = BaseOptions & {
   dataMatch: string
 }
+
+export type IsTagExist = BaseOptions & {
+  mode: TagMode
+  findId?: number
+}
+
+export type IsCategoryExist = IsTagExist

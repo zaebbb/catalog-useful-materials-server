@@ -25,3 +25,6 @@ export {
 export {
   NoteCoursePatternValidator,
 } from './NoteCoursePatternValidator/NoteCoursePatternValidator'
+export {
+  NoteCustomPatternValidator,
+} from './NoteCustomPatternValidator/NoteCustomPatternValidator'

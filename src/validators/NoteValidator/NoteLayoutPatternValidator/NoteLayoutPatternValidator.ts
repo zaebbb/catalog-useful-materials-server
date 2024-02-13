@@ -23,7 +23,6 @@ export class NoteLayoutPatternValidator extends BaseValidator<LayoutTypePattern>
     } = this.getValues()
 
     this.setError(('imageLayout'), await validate(imageLayout, {
-      isRequired: true,
       isFile: true,
       isImage: true,
       isFileSize: { on: true, maxMB: 2 },

@@ -19,6 +19,18 @@ export class GetFileService {
     return getDirUpload([this.file]).src
   }
 
+  getPathOS (): string {
+    if (!this.file) {
+      return ''
+    }
+
+    if (this.isLink()) {
+      return this.file
+    }
+
+    return getDirUpload([this.file]).path
+  }
+
   isLink (): boolean {
     const filePath = this.file
 

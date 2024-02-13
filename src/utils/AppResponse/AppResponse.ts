@@ -14,6 +14,11 @@ export class AppResponse {
     return this
   }
 
+  public setBlob (data: Buffer): this {
+    this.res.send(data)
+    return this
+  }
+
   public setCookie (
     key: string,
     value: string,
@@ -29,6 +34,11 @@ export class AppResponse {
 
   public setStatus (statusCode: number): this {
     this.res.status(statusCode)
+    return this
+  }
+
+  public setHeader (name: string, value: string): this {
+    this.res.setHeader(name, value)
     return this
   }
 

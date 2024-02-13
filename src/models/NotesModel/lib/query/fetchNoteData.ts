@@ -7,6 +7,7 @@ import { mapperArticlePattern } from '../helpers/mapperArticlePattern'
 import { mapperBookPattern } from '../helpers/mapperBookPattern'
 import { mapperCodePattern } from '../helpers/mapperCodePattern'
 import { mapperCoursePattern } from '../helpers/mapperCoursePattern'
+import { mapperCustomPattern } from '../helpers/mapperCustomPattern'
 import { mapperIssuePattern } from '../helpers/mapperIssuePattern'
 import { mapperLayoutPattern } from '../helpers/mapperLayoutPattern'
 import { mapperServicePattern } from '../helpers/mapperServicePattern'
@@ -68,6 +69,7 @@ export const fetchNoteData = async (code: string): Promise<BaseFieldsDetails | u
         select: {
           value: true,
           name: true,
+          code: true,
         },
         where: {
           notes: {
@@ -103,6 +105,7 @@ export const fetchNoteData = async (code: string): Promise<BaseFieldsDetails | u
   const patternVideo = mapperVideoPattern(note.fields)
   const patternTechnology = mapperTechnologyPattern(note.fields)
   const patternCourse = mapperCoursePattern(note.fields)
+  const patternCustom = mapperCustomPattern(note.fields)
 
   const avatarFile = new GetFileService(note.user.userData?.avatar)
 
@@ -134,5 +137,6 @@ export const fetchNoteData = async (code: string): Promise<BaseFieldsDetails | u
     patternVideo: isPattern(patternVideo, codeNote, TypeList.VIDEO) ? patternVideo : undefined,
     patternTechnology: isPattern(patternTechnology, codeNote, TypeList.TECHNOLOGY) ? patternTechnology : undefined,
     patternCourse: isPattern(patternCourse, codeNote, TypeList.COURSE) ? patternCourse : undefined,
+    patternCustom: note.type.isCustom ? patternCustom : undefined,
   }
 }
